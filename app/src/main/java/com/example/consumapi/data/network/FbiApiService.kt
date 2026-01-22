@@ -1,6 +1,5 @@
-package com.example.consumapi.network
+package com.example.consumapi.data.network
 
-import com.example.consumapi.data.model.WantedResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 

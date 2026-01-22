@@ -1,4 +1,4 @@
-package com.example.consumapi.network
+package com.example.consumapi.data.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

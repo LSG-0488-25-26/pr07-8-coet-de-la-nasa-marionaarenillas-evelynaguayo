@@ -1,6 +1,6 @@
 package com.example.consumapi.data.model
-import com.google.gson.annotations.SerializedName
 
+import com.google.gson.annotations.SerializedName
 
 // Respuesta principal de la API
 data class WantedResponse(
@@ -42,7 +42,7 @@ data class WantedPerson(
     @SerializedName("url") val url: String?
 )
 
-// Imagenes del buscado
+// Imágenes del buscado
 data class WantedImage(
     @SerializedName("original") val original: String?,
     @SerializedName("large") val large: String?,
