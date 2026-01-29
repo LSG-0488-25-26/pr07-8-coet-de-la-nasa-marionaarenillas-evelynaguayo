@@ -3,7 +3,7 @@ package com.example.consumapi.data.repository
 import com.example.consumapi.data.model.WantedResponse
 import com.example.consumapi.data.network.RetrofitClient
 
-class WantedRepository {
+class FBIRepository {
     private val apiService = RetrofitClient.apiService
 
     suspend fun getWantedList(page: Int = 1): Result<WantedResponse> {
