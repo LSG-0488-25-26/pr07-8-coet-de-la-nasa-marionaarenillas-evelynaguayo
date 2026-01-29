@@ -1,8 +1,10 @@
 package com.example.consumapi.ui.screen
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,10 +28,16 @@ fun WantedListScreen(viewModel: WantedViewModel) {
         is WantedViewModel.UIState.Success -> {
             LazyColumn(modifier = Modifier.padding(16.dp)) {
                 items(wantedList) { person ->
-                    Text(
-                        text = person.title ?: "Sin nombre",
-                        modifier = Modifier.padding(8.dp)
-                    )
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                    ) {
+                        Text(
+                            text = person.title ?: "Sin nombre",
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
                 }
             }
         }
