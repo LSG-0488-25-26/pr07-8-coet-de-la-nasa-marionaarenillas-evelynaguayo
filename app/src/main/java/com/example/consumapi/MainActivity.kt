@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ConsumAPITheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
+                Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
                     App()
                 }
             }
