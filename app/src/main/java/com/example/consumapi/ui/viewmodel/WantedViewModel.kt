@@ -1,6 +1,7 @@
 package com.example.consumapi.ui.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,38 @@ class WantedViewModel(
 
     private val _uiState = MutableLiveData<UIState>()
     val uiState: LiveData<UIState> = _uiState
+
+    // Text que l'usuari escriu a la SearchBar
+    private val _searchQuery = MutableLiveData("")
+    val searchQuery: LiveData<String> = _searchQuery
+
+    fun onSearchQuearyChange(newValue: String) {
+        _searchQuery.value = newValue
+    }
+
+    // Llista filtrada segons el text de cerca
+    val filteredWantedList: LiveData<List<WantedPerson>> =
+        MediatorLiveData<List<WantedPerson>>().apply {
+
+            fun update() {
+                val query = _searchQuery.value.orEmpty().trim().lowercase()
+                val list = _wantedList.value.orEmpty()
+
+                value = if (query.isBlank()) {
+                    list
+                } else {
+                    list.filter { person ->
+                        person.title.orEmpty().lowercase().contains(query)
+                    }
+                }
+            }
+
+            // Quan canvia la llista (API), recalcula el filtrat
+            addSource(_wantedList) { update() }
+
+            // Quan canvia el text de cerca, recalcula el filtrat
+            addSource(_searchQuery) { update() }
+        }
 
     sealed class UIState {
         object Loading : UIState()
