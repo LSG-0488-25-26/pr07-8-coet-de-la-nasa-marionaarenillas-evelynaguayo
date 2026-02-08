@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -32,7 +34,10 @@ fun WantedDetailScreen(
                 title = { Text(person?.title ?: "Detall") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Text("←")
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Tornar enrere"
+                        )
                     }
                 }
             )
