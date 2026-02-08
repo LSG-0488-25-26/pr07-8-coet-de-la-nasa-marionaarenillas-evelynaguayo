@@ -65,14 +65,21 @@ fun WantedListScreen(
                             if (!imageUrl.isNullOrEmpty()) {
                                 Image(
                                     painter = rememberAsyncImagePainter(imageUrl),
-                                    contentDescription = person.title ?: "Sin nombre",
+                                    contentDescription = person.title ?: "Foto",
                                     modifier = Modifier
-                                        .size(64.dp)
+                                        .size(56.dp)
                                         .clip(CircleShape),
                                     contentScale = ContentScale.Crop
                                 )
                             } else {
-                                Spacer(modifier = Modifier.size(64.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .size(56.dp)
+                                        .clip(CircleShape),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text("No foto")
+                                }
                             }
 
                             Spacer(modifier = Modifier.width(16.dp))
