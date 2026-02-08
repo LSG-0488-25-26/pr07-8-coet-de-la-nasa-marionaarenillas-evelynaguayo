@@ -59,7 +59,8 @@ fun WantedListScreen(
                             modifier = Modifier.padding(16.dp)
                         ) {
 
-                            val imageUrl = person.images?.firstOrNull()?.original
+                            val imageUrl = person.images?.firstOrNull()?.thumb
+                                ?: person.images?.firstOrNull()?.original
 
                             if (!imageUrl.isNullOrEmpty()) {
                                 Image(

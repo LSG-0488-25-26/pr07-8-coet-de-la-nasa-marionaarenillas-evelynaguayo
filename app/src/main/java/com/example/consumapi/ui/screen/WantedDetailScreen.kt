@@ -51,7 +51,8 @@ fun WantedDetailScreen(
             return@Scaffold
         }
 
-        val imageUrl = person.images?.firstOrNull()?.original
+        val imageUrl = person.images?.firstOrNull()?.thumb
+            ?: person.images?.firstOrNull()?.original
 
         Column(
             modifier = Modifier
