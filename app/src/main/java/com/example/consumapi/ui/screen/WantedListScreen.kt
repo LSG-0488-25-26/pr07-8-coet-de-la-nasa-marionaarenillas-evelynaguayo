@@ -1,6 +1,7 @@
 package com.example.consumapi.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,12 +21,16 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.consumapi.ui.viewmodel.WantedViewModel
 
 @Composable
-fun WantedListScreen(viewModel: WantedViewModel) {
+fun WantedListScreen(
+    viewModel: WantedViewModel,
+    onPersonClick: (String) -> Unit
+) {
 
     val wantedList by viewModel.wantedList.observeAsState(emptyList())
     val uiState by viewModel.uiState.observeAsState()
 
     when (uiState) {
+
         is WantedViewModel.UIState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -42,12 +47,20 @@ fun WantedListScreen(viewModel: WantedViewModel) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 8.dp)
+                            .clickable {
+                                val uid = person.uid
+                                if (!uid.isNullOrBlank()) {
+                                    onPersonClick(uid)
+                                }
+                            }
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(16.dp)
                         ) {
+
                             val imageUrl = person.images?.firstOrNull()?.original
+
                             if (!imageUrl.isNullOrEmpty()) {
                                 Image(
                                     painter = rememberAsyncImagePainter(imageUrl),
@@ -57,21 +70,15 @@ fun WantedListScreen(viewModel: WantedViewModel) {
                                         .clip(CircleShape),
                                     contentScale = ContentScale.Crop
                                 )
+                            } else {
+                                Spacer(modifier = Modifier.size(64.dp))
                             }
 
                             Spacer(modifier = Modifier.width(16.dp))
 
-                            Column {
-                                Text(
-                                    text = person.title ?: "Sin nombre"
-                                )
-                                person.rewardText?.let { reward ->
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Text(
-                                        text = reward
-                                    )
-                                }
-                            }
+                            Text(
+                                text = person.title ?: "Sin nombre"
+                            )
                         }
                     }
                 }
@@ -83,7 +90,7 @@ fun WantedListScreen(viewModel: WantedViewModel) {
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text(text = "Error al cargar datos")
+                Text("Error al cargar datos")
             }
         }
 
