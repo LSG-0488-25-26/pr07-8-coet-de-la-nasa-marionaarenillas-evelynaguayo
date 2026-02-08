@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.consumapi.data.local.WantedEntity
 import com.example.consumapi.data.model.WantedPerson
 import com.example.consumapi.data.repository.FBIRepository
 import kotlinx.coroutines.launch
@@ -17,8 +19,11 @@ class WantedViewModel(
     private val _wantedList = MutableLiveData<List<WantedPerson>>()
     val wantedList: LiveData<List<WantedPerson>> = _wantedList
 
-    private val _uiState = MutableLiveData<UIState>()
+    private val _uiState = MutableLiveData<UIState>(UIState.Loading)
     val uiState: LiveData<UIState> = _uiState
+
+    // Llistat de capturats (Room) observable des de la UI
+    val captured: LiveData<List<WantedEntity>> = repository.getCaptured().asLiveData()
 
     // Text que l'usuari escriu a la SearchBar
     private val _searchQuery = MutableLiveData("")
@@ -26,6 +31,13 @@ class WantedViewModel(
 
     fun onSearchQueryChange(newValue: String) {
         _searchQuery.value = newValue
+    }
+
+    // Captura o allibera una persona (toggle) guardant-ho a Room
+    fun toggleCapture(person: WantedPerson) {
+        viewModelScope.launch {
+            repository.toggleCaptured(person)
+        }
     }
 
     // Llista filtrada segons el text de cerca

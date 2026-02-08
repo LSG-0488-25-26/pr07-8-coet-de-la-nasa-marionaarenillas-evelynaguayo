@@ -100,7 +100,7 @@ fun App() {
             modifier = Modifier.padding(padding)
         ) {
             composable("home") {
-                // Home = la teva llista sense SearchBar
+                // Home = la llista sense SearchBar
                 WantedListScreen(
                     viewModel = wantedViewModel,
                     onPersonClick = { uid -> navController.navigate("detail/$uid") }

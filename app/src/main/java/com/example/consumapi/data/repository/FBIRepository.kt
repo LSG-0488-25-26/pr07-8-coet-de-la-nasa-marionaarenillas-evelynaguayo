@@ -8,7 +8,6 @@ import com.example.consumapi.data.network.RetrofitClient
 import kotlinx.coroutines.flow.Flow
 
 // Centralitza l'accés a dades remotes (API) i locals (ROOM)
-
 class FBIRepository(
     private val dao: WantedDao
 ) {
