@@ -9,8 +9,9 @@ import com.example.consumapi.data.model.WantedPerson
 import com.example.consumapi.data.repository.FBIRepository
 import kotlinx.coroutines.launch
 
+// Gestiona l'estat de la UI i comunica la intericie amb el repository
 class WantedViewModel(
-    private val repository: FBIRepository = FBIRepository()
+    private val repository: FBIRepository
 ) : ViewModel() {
 
     private val _wantedList = MutableLiveData<List<WantedPerson>>()

@@ -21,10 +21,15 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.consumapi.data.local.DatabaseProvider
 import com.example.consumapi.ui.screen.CapturedScreen
 import com.example.consumapi.ui.screen.WantedSearchScreen
+import com.example.consumapi.data.repository.FBIRepository
+import com.example.consumapi.ui.viewmodel.WantedViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +44,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App() {
-    val wantedViewModel: WantedViewModel = viewModel()
+    val context = LocalContext.current
+    // remember per evitar crear la BD i el repo a cada compilacio
+    val dao = remember { DatabaseProvider.getDb(context).wantedDao() }
+    val repo = remember { FBIRepository(dao) }
+
+    val wantedViewModel: WantedViewModel =
+        viewModel(factory = WantedViewModelFactory(repo))
     val navController = rememberNavController()
 
     // per saber a quina pantalla estem (i marcar la icona seleccionada)
@@ -55,7 +66,12 @@ fun App() {
                 NavigationBar {
                     NavigationBarItem(
                         selected = currentRoute == "home",
-                        onClick = { navController.navigate("home") },
+                        onClick = {
+                            navController.navigate("home") {
+                                popUpTo("home") { inclusive = false }
+                                launchSingleTop = true
+                            }
+                        },
                         icon = { Icon(Icons.Filled.Home, contentDescription = "Home") },
                         label = { Text("Home") }
                     )
@@ -100,7 +116,7 @@ fun App() {
             }
 
             composable("captured") {
-                CapturedScreen()
+                CapturedScreen(viewModel = wantedViewModel)
             }
 
             composable(

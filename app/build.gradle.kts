@@ -2,8 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
-    id("kotlin-kapt") // Para utilizar la lib Room para la persistencia de datos
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -67,9 +66,9 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.6.1")
 
     // Room
-    implementation("androidx.room:room-runtime:2.6")
-    implementation("androidx.room:room-ktx:2.6.1" )
-    kapt("androidx.room:room-compiler:2.6.1" )
+    implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
