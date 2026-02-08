@@ -1,5 +1,6 @@
 package com.example.consumapi.ui.screen
 
+import com.example.consumapi.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,9 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.example.consumapi.ui.viewmodel.WantedViewModel
+import coil.compose.AsyncImage
+
 
 @Composable
 fun WantedListScreen(
@@ -62,31 +66,25 @@ fun WantedListScreen(
                             val imageUrl = person.images?.firstOrNull()?.thumb
                                 ?: person.images?.firstOrNull()?.original
 
-                            if (!imageUrl.isNullOrEmpty()) {
-                                Image(
-                                    painter = rememberAsyncImagePainter(imageUrl),
-                                    contentDescription = person.title ?: "Foto",
-                                    modifier = Modifier
-                                        .size(56.dp)
-                                        .clip(CircleShape),
-                                    contentScale = ContentScale.Crop
-                                )
-                            } else {
-                                Box(
-                                    modifier = Modifier
-                                        .size(56.dp)
-                                        .clip(CircleShape),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text("No foto")
-                                }
-                            }
+                            AsyncImage(
+                                model = imageUrl,
+                                contentDescription = person.title ?: "Foto",
+                                placeholder = painterResource(R.drawable.imatge_perfil_predeterminat),
+                                error = painterResource(R.drawable.imatge_perfil_predeterminat),
+                                modifier = Modifier
+                                    .size(56.dp)
+                                    .clip(CircleShape),
+                                contentScale = ContentScale.Crop
+                            )
 
-                            Spacer(modifier = Modifier.width(16.dp))
+                            Spacer(modifier = Modifier.width(12.dp))
 
                             Text(
-                                text = person.title ?: "Sin nombre"
+                                text = person.title ?: "Sin nombre",
+                                modifier = Modifier.weight(1f),
+                                maxLines = 2
                             )
+
                         }
                     }
                 }
