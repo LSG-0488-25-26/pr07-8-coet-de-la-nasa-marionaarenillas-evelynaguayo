@@ -1,7 +1,5 @@
 package com.example.consumapi.ui.screen
 
-import com.example.consumapi.R
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -19,22 +17,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
-import com.example.consumapi.ui.viewmodel.WantedViewModel
 import coil.compose.AsyncImage
-
+import com.example.consumapi.R
+import com.example.consumapi.ui.viewmodel.WantedViewModel
 
 @Composable
 fun WantedListScreen(
     viewModel: WantedViewModel,
     onPersonClick: (String) -> Unit
 ) {
-
+    val uiState by viewModel.uiState.observeAsState(WantedViewModel.UIState.Loading)
     val wantedList by viewModel.wantedList.observeAsState(emptyList())
-    val uiState by viewModel.uiState.observeAsState()
 
     when (uiState) {
-
         is WantedViewModel.UIState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -45,7 +40,11 @@ fun WantedListScreen(
         }
 
         is WantedViewModel.UIState.Success -> {
-            LazyColumn(modifier = Modifier.padding(16.dp)) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
                 items(wantedList) { person ->
                     Card(
                         modifier = Modifier
@@ -53,16 +52,13 @@ fun WantedListScreen(
                             .padding(vertical = 8.dp)
                             .clickable {
                                 val uid = person.uid
-                                if (!uid.isNullOrBlank()) {
-                                    onPersonClick(uid)
-                                }
+                                if (!uid.isNullOrBlank()) onPersonClick(uid)
                             }
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.padding(16.dp)
                         ) {
-
                             val imageUrl = person.images?.firstOrNull()?.thumb
                                 ?: person.images?.firstOrNull()?.original
 
@@ -84,7 +80,6 @@ fun WantedListScreen(
                                 modifier = Modifier.weight(1f),
                                 maxLines = 2
                             )
-
                         }
                     }
                 }
@@ -100,7 +95,5 @@ fun WantedListScreen(
                 Text("Error: $msg")
             }
         }
-
-        else -> {}
     }
 }

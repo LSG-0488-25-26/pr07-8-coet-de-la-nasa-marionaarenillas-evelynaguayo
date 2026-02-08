@@ -23,7 +23,7 @@ class WantedViewModel(
     private val _searchQuery = MutableLiveData("")
     val searchQuery: LiveData<String> = _searchQuery
 
-    fun onSearchQuearyChange(newValue: String) {
+    fun onSearchQueryChange(newValue: String) {
         _searchQuery.value = newValue
     }
 
