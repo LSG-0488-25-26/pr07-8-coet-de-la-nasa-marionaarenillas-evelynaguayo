@@ -86,11 +86,12 @@ fun WantedListScreen(
         }
 
         is WantedViewModel.UIState.Error -> {
+            val msg = (uiState as WantedViewModel.UIState.Error).message
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Error al cargar datos")
+                Text("Error: $msg")
             }
         }
 

@@ -37,8 +37,8 @@ class WantedViewModel(
             result.onSuccess { response ->
                 _wantedList.value = response.items
                 _uiState.value = UIState.Success
-            }.onFailure {
-                _uiState.value = UIState.Error("Error al cargar datos")
+            }.onFailure { e ->
+                _uiState.value = UIState.Error(e.localizedMessage ?: e.toString())
             }
         }
     }
