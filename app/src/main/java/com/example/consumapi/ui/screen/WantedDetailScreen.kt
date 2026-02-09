@@ -8,7 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
-//import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -27,18 +27,17 @@ fun WantedDetailScreen(
     uid: String,
     onBack: () -> Unit
 ) {
-    // Llista completa de persones (API)
     val wantedList = viewModel.wantedList.observeAsState(emptyList()).value
-
-    // Persona seleccionada segons uid
     val person = wantedList.firstOrNull { it.uid == uid }
+
+    // Llista de capturats de Room per saber si aquesta persona està capturada
+    val capturedList = viewModel.captured.observeAsState(emptyList()).value
+    val isCaptured = capturedList.any { it.uid == uid }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(person?.title ?: "Detall") },
-
-                // Botó per tornar enrere
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
@@ -47,16 +46,12 @@ fun WantedDetailScreen(
                         )
                     }
                 },
-
-                // Boto per capturar / alliberar
                 actions = {
                     if (person != null) {
-                        IconButton(
-                            onClick = { viewModel.toggleCapture(person) }
-                        ) {
+                        IconButton(onClick = { viewModel.toggleCapture(person) }) {
                             Icon(
-                                imageVector = Icons.Filled.Star,
-                                contentDescription = "Capturar"
+                                imageVector = if (isCaptured) Icons.Filled.Star else Icons.Outlined.StarBorder,
+                                contentDescription = if (isCaptured) "Alliberar" else "Capturar"
                             )
                         }
                     }
@@ -65,7 +60,6 @@ fun WantedDetailScreen(
         }
     ) { padding ->
 
-        // Si no trobem la persona
         if (person == null) {
             Box(
                 modifier = Modifier
@@ -78,7 +72,6 @@ fun WantedDetailScreen(
             return@Scaffold
         }
 
-        // Imatge principal
         val imageUrl = person.images?.firstOrNull()?.thumb
             ?: person.images?.firstOrNull()?.original
 
@@ -90,7 +83,6 @@ fun WantedDetailScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            // Foto
             if (!imageUrl.isNullOrEmpty()) {
                 Image(
                     painter = rememberAsyncImagePainter(imageUrl),
@@ -100,11 +92,9 @@ fun WantedDetailScreen(
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
-
                 Spacer(modifier = Modifier.height(16.dp))
             }
 
-            // Nom
             Text(
                 text = person.title ?: "Sin nombre",
                 style = MaterialTheme.typography.headlineSmall
@@ -112,21 +102,13 @@ fun WantedDetailScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Recompensa
             person.rewardText?.takeIf { it.isNotBlank() }?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                Text(text = it, style = MaterialTheme.typography.bodyLarge)
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-            // Descripció
             person.description?.takeIf { it.isNotBlank() }?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                Text(text = it, style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
