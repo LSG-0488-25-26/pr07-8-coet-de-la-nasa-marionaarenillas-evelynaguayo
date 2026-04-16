@@ -40,6 +40,13 @@ class WantedViewModel(
         }
     }
 
+    // Allibera (elimina de Room) una persona pel seu uid
+    fun uncapture(uid: String) {
+        viewModelScope.launch {
+            repository.uncapture(uid)
+        }
+    }
+
     // Llista filtrada segons el text de cerca
     val filteredWantedList: LiveData<List<WantedPerson>> =
         MediatorLiveData<List<WantedPerson>>().apply {
